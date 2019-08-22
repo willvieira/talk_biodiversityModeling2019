@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>index.utf8.md</title>
+    <meta charset="utf-8">
+    <link href="assets/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/academicons-1.8.1/css/academicons.min.css">
+    <link rel="stylesheet" href="conf/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="conf/css/fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+class: middle, title-slide
+
+# LAB: {STManaged} R package
+
+### Willian Vieira
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;i class="fa fa-github fa-2x" style="color:#335049"&gt;&lt;/i&gt; [WillVieira/talk_biodiversityModeling2019](https://github.com/willvieira/talk_biodiversityModeling2019)
+
+&lt;i class="fa fa-home fa-2x" style="color:#335049"&gt;&lt;/i&gt; [https://willvieira.github.io/STManaged/](https://willvieira.github.io/STManaged/)
+
+---
+class: inverse, center, middle
+
+# LAB
+
+## {STManaged} R package
+
+---
+
+## LAB steps
+
+1. Install package
+2. Functions of the package
+3. Understanding the package output
+
+---
+## STManaged R package: install
+
+&lt;i class="fa fa-github fa-2x" style="color:#335049"&gt;&lt;/i&gt; [WillVieira/talk_biodiversityModeling2019](https://github.com/willvieira/talk_biodiversityModeling2019)
+
+```r
+devtools::install_github("willvieira/STManaged")
+```
+
+For Linux users, install `ImageMagick++` library before
+
+
+---
+## STManaged R package: main functions
+
+- Create the initial landscape
+```r
+create_virtual_landscape()
+```
+
+- run the model
+```r
+run_model()
+```
+
+---
+## STManaged R package: initial landscape
+
+
+```r
+initLand &lt;- create_virtual_landscape(climRange = c(-2.61, 5.07),
+                                     cellSize = 1)
+```
+
+plot `initLand`:
+
+
+```r
+plot_landscape(initLand, xaxis = TRUE)
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## STManaged R package: run the model
+
+```r
+lands &lt;- run_model(steps = 20,
+                   initLand,
+                   managInt = c(0, 0, 0, 0),
+                   RCP = 8.5)
+```
+
+
+
+&lt;!-- save(lands, file = 'GitHub/talk_biodiversityModeling2019/data/lands.Rdata')--&gt;
+
+--
+
+
+```r
+names(lands)
+#  [1] "land_T0"  "land_T1"  "land_T2"  "land_T3"  "land_T4"  "land_T5" 
+#  [7] "land_T6"  "land_T7"  "land_T8"  "land_T9"  "land_T10" "land_T11"
+# [13] "land_T12" "land_T13" "land_T14" "land_T15" "land_T16" "land_T17"
+# [19] "land_T18" "land_T19" "land_T20" "env1"     "steps"    "manag"   
+# [25] "RCP"      "nCol"     "nRow"
+```
+
+---
+## STManaged R package: output
+
+- landscape occupancy
+
+
+```r
+par(mfrow = c(1, 2))
+plot_occupancy(lands, step = 0, spar = 0.4)
+plot_occupancy(lands, step = 20, spar = 0.4)
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## STManaged R package: output
+
+- animate temporal dynamic
+
+```r
+animate(lands, fps = 2)
+```
+
+--
+
+![](images/RCP8.5_virtual.gif)
+
+---
+class: inverse, center, middle
+
+# Using real landscape
+
+---
+## STManaged R package: initial landscape
+
+
+```r
+initLand &lt;- create_real_landscape()
+```
+
+plot `initLand`:
+
+
+```r
+plot_landscape(initLand)
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## STManaged R package: run the model
+
+```r
+lands &lt;- run_model(steps = 20,
+                   initLand,
+                   managInt = c(0, 0, 0, 0))
+```
+
+Note: the only `RCP` scenario is `8.5`
+
+
+
+--
+
+
+```r
+names(lands)
+# [1] "lands" "steps" "manag" "RCP"   "nCol"  "nRow"
+class(lands[['lands']])
+# [1] "RasterStack"
+# attr(,"package")
+# [1] "raster"
+names(lands[['lands']])
+#  [1] "land_T0"  "tp"       "pp"       "land_T1"  "land_T2"  "land_T3" 
+#  [7] "land_T4"  "land_T5"  "land_T6"  "land_T7"  "land_T8"  "land_T9" 
+# [13] "land_T10" "land_T11" "land_T12" "land_T13" "land_T14" "land_T15"
+# [19] "land_T16" "land_T17" "land_T18" "land_T19" "land_T20"
+```
+
+---
+## STManaged R package: output
+
+- animate temporal dynamic
+
+```r
+animate(lands, fps = 2)
+```
+
+--
+.center[
+  ![:scale 85%](images/RCP8.5_real.gif)
+]
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="conf/style-macros.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
