@@ -1,2 +1,1 @@
-# talkTemplate
-My remark.js talk template
+# Biodiversity Modeling 2019
